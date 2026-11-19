@@ -451,7 +451,7 @@ footer .ic { padding-block: 32px calc(96px + env(safe-area-inset-bottom, 0px)); 
   .sekmeler { display: flex; flex-wrap: nowrap; width: 100% } .sekmeler button { flex: 1 1 0; padding: 8px 6px; font-size: .8rem; white-space: nowrap }
   .dugme { padding: 11px 16px; font-size: .88rem } .dugme.kucuk { padding: 8px 12px }
   .ikon-dugme { width: 38px; height: 38px }
-  .dunya-araclar .ikon-dugme { width: 36px; height: 36px }
+  .dunya-araclar .ikon-dugme { width: 44px; height: 44px }   /* denetim #12: dokunma hedefi en az 44 px */
   .hap-dugme { padding: 7px 11px; font-size: .78rem }
   .bolum-baslik h2, h2 { text-wrap: balance }
 }
@@ -521,7 +521,7 @@ footer .ic { padding-block: 32px calc(96px + env(safe-area-inset-bottom, 0px)); 
 .pano-alt .gez-alt { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding: 2px }
 .pano-alt .gez-alt button { background: var(--cam); backdrop-filter: blur(10px); flex: none }
 .pano-alt .gez-alt button[aria-pressed="true"] { background: linear-gradient(135deg, var(--yesil-c), var(--turkuaz)); color: var(--uzerinde) }
-.pano-katman .ipucu { bottom: auto; top: 18px; left: auto; right: 64px }
+.pano-katman .ipucu { bottom: auto; top: 20px; left: auto; right: 128px; padding: 5px 11px; border-radius: 999px; background: rgba(12, 13, 17, .42); backdrop-filter: blur(6px) }   /* denetim #10: tam ekran/döndür düğmeleriyle çakışıyordu, açık gökte okunmuyordu */
 /* Street View tarzı geçiş noktaları: yerde ok + ad; tıklayınca o noktaya yürünür */
 .gez-noktalar { position: absolute; inset: 0; pointer-events: none; z-index: 2; overflow: hidden }
 .gez-nokta { position: absolute; left: 0; top: 0; pointer-events: auto; border: 0; background: none; padding: 0; cursor: pointer; display: grid; justify-items: center; gap: 6px; color: #fff; transform-origin: 50% 100%; transition: opacity .25s; will-change: transform }
@@ -564,7 +564,7 @@ body.tam-acik { overflow: hidden }
 .mini-kart .kp-kat button:disabled { opacity: .35; cursor: default }
 .mini-kart .kp-kat svg { width: 16px; height: 16px }
 .kp-liste { display: grid; gap: 3px }
-.kp-daire { display: grid; grid-template-columns: 10px 22px 1fr auto auto; align-items: center; gap: 8px; border: 0; border-radius: 10px; padding: 7px 9px; background: transparent; color: var(--metin); font: 600 .8rem var(--f-govde); text-align: left; cursor: pointer; transition: background .15s }
+.kp-daire { display: grid; grid-template-columns: 10px minmax(22px, auto) 1fr auto auto; align-items: center; gap: 8px; border: 0; border-radius: 10px; padding: 7px 9px; background: transparent; color: var(--metin); font: 600 .8rem var(--f-govde); text-align: left; cursor: pointer; transition: background .15s }
 .kp-daire i { width: 10px; height: 10px; border-radius: 50% }
 .kp-daire b { font-weight: 800 } .kp-daire .m2 { font-variant-numeric: tabular-nums; font-weight: 700 } .kp-daire em { font-style: normal; font-size: .7rem; font-weight: 800; color: var(--soluk) }
 .kp-daire span:not(.m2) { color: var(--soluk); font-size: .74rem }
@@ -1365,7 +1365,7 @@ body.dunya-acik, body.kilit { overflow: hidden }
           <button type="button" class="ikon-dugme" id="gez-yakin" aria-label="Yakınlaş"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
           <button type="button" class="ikon-dugme" id="gez-uzak" aria-label="Uzaklaş"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
         </div>
-        <span class="ipucu">Sürükleyin · oklarla yürüyün</span>
+        <span class="ipucu">Sürükleyin · yerdeki oklarla yürüyün</span>
         <div class="gez-noktalar" id="gez-noktalar"></div>
         <div class="gez-perde" id="gez-perde"></div>
       </div>
@@ -2951,8 +2951,8 @@ function dunyaSenkron() {
   document.getElementById('dunya-ipucu').textContent = {
     site: 'Bir binaya dokunun',
     blok: 'Bir kat seçin',
-    kat: 'Bir daire seçin · Esc: geri',
-    balkon: 'Sürükleyerek etrafa bakın · Esc: kata dön',
+    kat: dokunmatik ? 'Bir daire seçin' : 'Bir daire seçin · Esc: geri',   // telefonda Esc tuşu yok (denetim #20)
+    balkon: dokunmatik ? 'Sürükleyerek etrafa bakın' : 'Sürükleyerek etrafa bakın · Esc: kata dön',
     cevre: 'Yakın yerler'
   }[sev];
   izCiz(); kart();
@@ -3432,7 +3432,7 @@ function gezCiz(lon, sonra) {
     const bd = gez.oda === 'balkon' && gez.daire && !(BALKON_TIPTE[gez.daire.b] || []).includes(gez.daire.no) ? gez.daire : null, yol = bd ? `360/balkon/${bd.b}${bd.k}${bd.no}.jpg` : `360/${gez.set}/${hd360() ? 'hd/' : ''}${gez.oda}.jpg`;
     // pencereler: odanın pencere maskesine dairenin kendi konumundan (kat, cephe) çekilmiş dış manzara bindirilir
     const pd = gez.oda !== 'balkon' && gez.daire && (PENCERE_MASKE[gez.set] || []).includes(gez.oda) ? gez.daire : null;
-    gez.pencere = pd ? { dunya: `360/pencere/${pd.b}${pd.k}${pd.no}.jpg`, maske: `360/${gez.set}/maske_${gez.oda}.png?v=20261119i` } : null;
+    gez.pencere = pd ? { dunya: `360/pencere/${pd.b}${pd.k}${pd.no}.jpg`, maske: `360/${gez.set}/maske_${gez.oda}.png?v=20261119o` } : null;
     gorselAc(yol, bd ? +BALKON_AYNA[bd.b].includes(bd.no) : gez.ayna, `<b>${yer}${gez.tip} m²</b> · ${odaAd}${benzer}`, lon, sonra);
   } else {
     oda.hidden = true; ust.hidden = false;
