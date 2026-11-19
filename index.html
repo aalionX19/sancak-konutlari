@@ -242,7 +242,7 @@ section.bolum { padding-block: clamp(72px, 10vw, 128px) 0 }
 .lejant.var { display: flex }
 .lejant span { display: inline-flex; align-items: center; gap: 6px }
 .lejant i { width: 12px; height: 12px; border-radius: 4px }
-.d3-lejant { position: absolute; left: 14px; top: 62px; z-index: 4; padding: 7px 13px; border-radius: 999px; background: var(--cam); backdrop-filter: blur(10px); box-shadow: var(--golge); font-size: .74rem; color: var(--metin) }
+.d3-lejant { position: absolute; left: 14px; top: 62px; z-index: 4; pointer-events: none; padding: 7px 13px; border-radius: 999px; background: var(--cam); backdrop-filter: blur(10px); box-shadow: var(--golge); font-size: .74rem; color: var(--metin) }
 .dunya.pano-acik .d3-lejant { display: none }
 .plan-kutu { overflow-x: auto; background: var(--kagit); border-radius: var(--r); margin-top: 12px; box-shadow: var(--golge), inset 0 0 0 1px var(--cizgi) }
 .plan-kutu svg { display: block; width: 100%; min-width: 760px; height: auto }
@@ -572,6 +572,8 @@ body.tam-acik { overflow: hidden }
 .kp-daire[aria-pressed="true"] { background: linear-gradient(135deg, var(--yesil-c), var(--turkuaz)); color: var(--uzerinde) }
 .kp-daire[aria-pressed="true"] em, .kp-daire[aria-pressed="true"] span { color: var(--uzerinde) }
 .kp-ayrinti { display: grid; gap: 8px; padding-top: 8px; border-top: 1px solid var(--cizgi) }
+/* telefon: seçili dairenin özeti ve 360 düğmesi başlığın hemen altında, liste aşağıda (kontrol mobil #2) */
+@media (max-width: 720px) { .mini-kart .kp-ust { order: -2 } .mini-kart .kp-ayrinti { order: -1; padding: 0 0 8px; border-top: 0; border-bottom: 1px solid var(--cizgi) } }
 .dunya.kat-odak .mini-kart { top: 64px; bottom: auto; max-height: calc(100% - 140px) }
 .kr-satir > button { width: 116px; flex: none }
 .dunya.kat-odak .kr-daireler, .dunya.kat-odak .kr-bas { display: none }
@@ -781,6 +783,14 @@ body.dunya-acik, body.kilit { overflow: hidden }
   .w-hero-alt .w-ic { gap: 12px }
   .w-hero-dugmeler { width: 100% } .w-hero-dugmeler .w-btn { flex: 1 1 auto }
   .w-kaydir { display: none }
+}
+
+/* yatay telefon (kontrol mobil #11): başlık bloğu kısa ekranda üst menüye taşmasın */
+@media (max-height: 500px) and (orientation: landscape) {
+  .w-hero-ic { padding-bottom: 92px } .w-adimlar { min-height: 0 } .w-adim { gap: 10px }
+  .w-baslik-dev { font-size: clamp(1.8rem, 4.6vw, 2.7rem) } .w-hero p.w-alt { font-size: .86rem; margin: 0 }
+  .w-rakam { padding: 7px 10px; min-width: 84px } .w-rakam b { font-size: 1.05rem }
+  .w-hero-alt { padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)) } .w-kaydir { display: none }
 }
 
 /* ---------- bölüm başlıkları ---------- */
@@ -1096,6 +1106,9 @@ body.dunya-acik, body.kilit { overflow: hidden }
 .w-yakin li i { font: 500 .66rem var(--w-f-mono); font-style: normal; color: var(--w-soluk); margin-left: auto; letter-spacing: .08em; text-transform: uppercase }
 @media (max-width: 960px) { .w-konum .w-k-adres { grid-column: 1 / -1 } .w-konum figure { grid-column: span 6 } }
 @media (max-width: 640px) { .w-konum figure { grid-column: 1 / -1; min-height: 240px } }
+/* telefon (kontrol mobil #10): görseldeki yer etiketleri kenardan kesilmesin, açıklama DG pinini örtmesin */
+@media (max-width: 640px) { .w-konum figure { min-height: 0; display: grid; background: rgba(11, 12, 16, .9) } .w-konum figure img { position: static; aspect-ratio: 16 / 9; height: auto; object-fit: contain }
+  .w-konum figcaption { position: static; border-radius: 0; background: transparent; padding: 10px 14px 12px; backdrop-filter: none } }
 
 /* ---------- alt bilgi ---------- */
 .w-alt-bilgi { position: relative; overflow: hidden; padding: clamp(60px, 9vw, 110px) 0 calc(36px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--w-cizgi) }
@@ -1974,8 +1987,8 @@ const HARITA = { gok: 0x040a14, zemin: 0x06101a, bina: 0x0e1c2b, park: 0x0a2216,
 const NEON = { avm: '#ff4fd8', kavsak: '#3ce8ff', otogar: '#3ce8ff', sanayi: '#ffb020', proje: '#c9ff39' };
 // 360 çekim noktaları (mimarın modelinde, metre): flow/daire_dis_cephe.json
 const PANOLAR = [
-  { id: 'site_girisi', ad: 'Site girişi', m: [426, 97] }, { id: 'giris_ici', ad: 'Giriş içi', m: [462, 97] },
-  { id: 'oyun_alani', ad: 'Oyun alanı', m: [481, 94.7] }, { id: 'basketbol_sahasi', ad: 'Basketbol sahası', m: [507, 99] },
+  { id: 'site_girisi', ad: 'Site girişi', m: [426, 97], bas: 65 }, { id: 'giris_ici', ad: 'Giriş içi', m: [462, 97] },
+  { id: 'oyun_alani', ad: 'Oyun alanı', m: [481, 94.7] }, { id: 'basketbol_sahasi', ad: 'Basketbol sahası', m: [507, 99], bas: 97 },
   { id: 'a_blok_onu', ad: 'A blok önü', m: [480, 140.5] }, { id: 'b_blok_onu', ad: 'B blok önü', m: [470, 58] }
 ].map(p => ({ ...p, x: p.m[0] - 489, z: -(p.m[1] - 97) }));
 /* 3D dünya saati: sitenin açık/koyu temasından bağımsız. Güneşin yeri Konya için (37,87° K, mayıs ortası, UTC+3);
@@ -2947,6 +2960,8 @@ function dunyaSenkron() {
   if (W3) W3.golgeKirli = true;
   const sev = D3.seviye;
   document.getElementById('kat-ray').hidden = !(sev === 'blok' || sev === 'kat');
+  { const ray = document.getElementById('kat-ray'), sb = ray.querySelector('button[aria-pressed="true"]');   // kontrol mobil #3: seçili kat şeritte görünür kalsın
+    if (sb && ray.scrollWidth > ray.clientWidth) ray.scrollLeft = Math.max(0, sb.offsetLeft - (ray.clientWidth - sb.offsetWidth) / 2) }
   document.getElementById('d3-cevre').setAttribute('aria-pressed', String(sev === 'cevre'));
   document.getElementById('dunya-ipucu').textContent = {
     site: 'Bir binaya dokunun',
@@ -2977,6 +2992,8 @@ function dunyaSenkron() {
   W3.odakHedef = katMi ? 1 : 0; dunyaKutu.classList.toggle('kat-odak', katMi); boyutla();
   plakaKur(); cepheDurumKur(); introKutuKur(); bantGoster();
   document.getElementById('d3-lejant').classList.toggle('var', sev === 'blok' && satis.hazir);
+  { const lj = document.getElementById('d3-lejant'), u = dunyaKutu.querySelector('.dunya-ust');   // kontrol (mobil #1): üst çubuk telefonda iki satıra iniyor; lejant iz yolunu/Çevre'yi örtmesin
+    if (lj.classList.contains('var') && u) lj.style.top = (u.offsetTop + u.offsetHeight + 8) + 'px' }
   for (const x of W3.etiket) if (x.tur === 'blok') {
     const s = sayim(x.veri);
     x.e.innerHTML = `${x.veri} blok${satis.hazir ? ` <small>${s.musait} müsait</small>` : ''}`;
@@ -3055,13 +3072,18 @@ function kart() {
   const mk = document.getElementById('mini-kart');
   if (D3.seviye !== 'kat' || D3.pano) { mk.hidden = true; return }
   const b = durum.blok, k = durum.kat, v = VERI[b], d = v.daireler.find(x => x.no === durum.daire); if (!d) { mk.hidden = true; return }
+  // kontrol (mobil #2/#3): kapatılabilir kart; blok/kat değişince en üstten açılır
+  const katAnah = b + k, anah = katAnah + '-' + d.no;
+  if (anah !== D3.kartAnah) D3.kartGizli = false;
+  const yeniKat = katAnah !== D3.kartKat; D3.kartAnah = anah; D3.kartKat = katAnah;
+  if (D3.kartGizli) { mk.hidden = true; return }
   const ds = durumu(b, k, d.no), acik = mk.querySelector('details')?.open, s = sayim(b, k);
   const yon = satis.yonetici ? `<div class="durum-sec" role="group" aria-label="Satış durumu">${DURUMLAR.map(x => `<button type="button" class="${x}" data-durum="${x}" aria-pressed="${x === ds}"><i class="d-${x}"></i>${DURUM_AD[x]}</button>`).join('')}</div>` : '';
   const ok = yol => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="${yol}"/></svg>`;
   const liste = v.daireler.map(x => { const xs = durumu(b, k, x.no); return `<button type="button" class="kp-daire" data-no="${x.no}" aria-pressed="${x.no === d.no}"><i class="d-${satis.hazir ? xs : 'musait'}"></i><b>${x.harf}</b><span>2+1 · net ${virgul(x.net)} m²</span><span class="m2">${x.brut} m²</span><em>${satis.hazir ? DURUM_AD[xs] : ''}</em></button>` }).join('');
   mk.hidden = false;
   mk.innerHTML = `<div class="kp-ust"><div><div class="etiket">${b} blok</div><h4>${KAT_AD(k)}</h4><div class="kp-ozet">${v.daireler.length} daire · 2+1${satis.hazir ? ` · <b>${s.musait} müsait</b>` : ''}</div></div>
-      <div class="kp-kat"><button type="button" data-k="${k + 1}" aria-label="Üst kat"${k >= 5 ? ' disabled' : ''}>${ok('M6 15l6-6 6 6')}</button><button type="button" data-k="${k - 1}" aria-label="Alt kat"${k <= 0 ? ' disabled' : ''}>${ok('M6 9l6 6 6-6')}</button></div></div>
+      <div class="kp-kat"><button type="button" data-k="${k + 1}" aria-label="Üst kat"${k >= 5 ? ' disabled' : ''}>${ok('M6 15l6-6 6 6')}</button><button type="button" data-k="${k - 1}" aria-label="Alt kat"${k <= 0 ? ' disabled' : ''}>${ok('M6 9l6 6 6-6')}</button><button type="button" class="kp-kapat" aria-label="Kartı kapat">${ok('M6 6l12 12M18 6L6 18')}</button></div></div>
     <div class="kp-liste" role="group" aria-label="Daire seç">${liste}</div>
     <div class="kp-ayrinti">
     <div class="ust"><b>${d.harf} · ${d.brut}<small> m² brüt</small></b>${satis.hazir ? `<span class="durum-rozet ${ds}">${DURUM_AD[ds]}</span>` : ''}</div>
@@ -3073,7 +3095,9 @@ function kart() {
   document.getElementById('mk-gez').onclick = () => daireGez(d.brut, d.tur, null, { b, k, no: d.no });
   document.getElementById('mk-balkon').onclick = () => daireGez(d.brut, d.tur, 'balkon', { b, k, no: d.no });
   mk.querySelectorAll('.kp-daire').forEach(x => x.addEventListener('click', () => daireSec(+x.dataset.no)));
-  mk.querySelectorAll('.kp-kat button').forEach(x => x.addEventListener('click', () => { katSec(+x.dataset.k); dunyaGit('kat') }));
+  mk.querySelectorAll('.kp-kat button[data-k]').forEach(x => x.addEventListener('click', () => { katSec(+x.dataset.k); dunyaGit('kat') }));
+  mk.querySelector('.kp-kapat').onclick = () => { D3.kartGizli = true; mk.hidden = true };
+  if (yeniKat) mk.scrollTop = 0;
   mk.querySelectorAll('.durum-sec button').forEach(x => x.addEventListener('click', () => durumYaz(b, k, d.no, x.dataset.durum)));
 }
 
@@ -3126,7 +3150,7 @@ function isaretciKur() {
     if (h.tur === 'blok') { if (h.b !== durum.blok) blokSec(h.b); dunyaGit('blok') }
     else if (h.tur === 'kat') { dunyaKatVurgu(null); D3.seviye = 'kat'; katSec(h.k); dunyaGit('kat') }
     else if (h.tur === 'birim') { dunyaKatVurgu(null); D3.seviye = 'kat'; durum.daire = h.no; katSec(h.k); dunyaGit('kat') }
-    else daireSec(h.no);
+    else { D3.kartGizli = false; daireSec(h.no) }
   });
   tuval.tabIndex = 0;
   tuval.addEventListener('keydown', e => { if (e.key === 'Escape') dunyaGit(D3.seviye === 'balkon' ? 'kat' : D3.seviye === 'kat' ? 'blok' : 'site') });
@@ -3168,16 +3192,19 @@ function panoDis(id) {
   const p = PANOLAR.find(x => x.id === id); if (!p) return;
   gez.grup = 'dis'; gez.dis = id;
   if (!D3.hazir) { D3.bekleyenPano = id; return }
-  if (D3.pano) { gezCiz(bakisLon()); return }
+  const bas = () => p.bas != null ? p.bas : bakisLon();   // kontrol mobil #6: kapıya / sahaya bakarak açılır (bas = 360·u − 180)
+  if (D3.pano) { gezCiz(bas()); return }
   const hedef = new THREE.Vector3(p.x, 1.7, p.z);
   donusKaydet(); W3.kontrol.minDistance = 1;
   if (D3.seviye !== 'site') { D3.seviye = 'site'; cephe() }
   ucus(hedef, 7, 82, az ? 1 : 1200);
-  setTimeout(() => { panoGoster(true); gezCiz(bakisLon()) }, az ? 0 : 1150);
+  setTimeout(() => { panoGoster(true); panoKapatYaz(); gezCiz(bas()) }, az ? 0 : 1150);
 }
+function panoKapatYaz() { const b = document.getElementById('pano-kapat'); b.lastChild.textContent = D3.donus && D3.donus.sayfa ? 'Sayfaya dön' : "3D'ye dön" }
 function panoKapat() {
   const d = D3.donus;
   panoGoster(false); D3.donus = null;
+  if (d && d.sayfa) { panoKapatYaz(); dunyaKapa(); return }
   if (!W3) return;
   W3.kontrol.minDistance = 18;
   if (!d) { if (gez.grup === 'dis') dunyaGit('site'); else dunyaSenkron(); return }
@@ -3244,10 +3271,15 @@ function dongu() {
       else if (x.tur === 'pano') gor = gor && panoGor;
       x.e.classList.toggle('gizli', !gor);
       if (gor) {
-        x.e.style.transform = `translate(${((v3.x + 1) / 2 * w).toFixed(1)}px, ${((1 - v3.y) / 2 * hgt).toFixed(1)}px) ${x.tur === 'daire' ? 'translate(-50%,-50%)' : 'translate(-50%,-100%)'}`;
+        x.sx = (v3.x + 1) / 2 * w; x.sy = (1 - v3.y) / 2 * hgt;
+        x.e.style.transform = `translate(${x.sx.toFixed(1)}px, ${x.sy.toFixed(1)}px) ${x.tur === 'daire' ? 'translate(-50%,-50%)' : 'translate(-50%,-100%)'}`;
         if (x.tur === 'yer' || x.tur === 'proje') x.e.style.opacity = hy.toFixed(2);
       }
     }
+    // kontrol mobil #8: blok etiketinin (müsait sayısı) üstüne düşen 360° pini o an gizlenir
+    const blGor = W3.etiket.filter(x => x.tur === 'blok' && !x.e.classList.contains('gizli'));
+    if (blGor.length) for (const x of W3.etiket) if (x.tur === 'pano' && !x.e.classList.contains('gizli')
+      && blGor.some(b => Math.abs(b.sx - x.sx) < (b.e.offsetWidth + 40) / 2 && x.sy > b.sy - b.e.offsetHeight - 4 && x.sy - 52 < b.sy)) x.e.classList.add('gizli');
     if (W3.golgeKirli || W3.odak !== W3.odakHedef) { W3.renderer.shadowMap.needsUpdate = true; W3.golgeKirli = false }
     // harita (uzak) görünümünde yalnız neon akıyorsa her ikinci kare çizilir
     if (!(h > .02 && !tw && d3Bos > 40 && (W3.kare = (W3.kare || 0) + 1) % 2)) W3.ciz();
@@ -3395,6 +3427,7 @@ function pencereU(maske) {
 const hd360 = () => !dokunmatik && !!three && three.renderer.capabilities.maxTextureSize >= 8192;
 function gorselAc(yol, ayna, baslik, lon, sonra) {
   gBaslik.innerHTML = baslik;
+  const tok = gez.yukTok = (gez.yukTok || 0) + 1;   // kontrol mobil #4: hızlı oda geçişinde geç biten eski yükleme ekranı ezmesin
   const t = threeKur(); if (!t) { gDurum.hidden = false; gDurum.textContent = '360° görüntüleyici yüklenemedi.'; return }
   gDurum.hidden = false; gDurum.textContent = 'Yükleniyor…';
   const pen = gez.grup === 'daire' ? gez.pencere : null;
@@ -3404,7 +3437,7 @@ function gorselAc(yol, ayna, baslik, lon, sonra) {
       const kullan = new Set([t.uniforms.tDoku.value, t.uniforms.tDunya.value, t.uniforms.tMaske.value]);
       for (const [k, e] of o) { if (o.size <= 8) break; if (e === d || kullan.has(e)) continue; e.dispose(); o.delete(k) }
       tamam(d) }, undefined, hata) });
-  const bitti = ([doku, dunya, maske]) => { t.uniforms.tDoku.value = doku; t.uniforms.ayna.value = ayna;
+  const bitti = ([doku, dunya, maske]) => { if (tok !== gez.yukTok) return; t.uniforms.tDoku.value = doku; t.uniforms.ayna.value = ayna;
     t.uniforms.pencere.value = dunya && maske ? 1 : 0; t.uniforms.tDunya.value = dunya || null; t.uniforms.tMaske.value = maske || null;
     // açılış yönü: yön verilmediyse pencereli odada camların ortasına bakarak açılır (eleştirmen raporu 2026-11-18 madde 6)
     const pu = lon == null && dunya && maske ? pencereU(maske) : null;
@@ -3412,7 +3445,7 @@ function gorselAc(yol, ayna, baslik, lon, sonra) {
   // manzara ya da maske gelmezse oda pencere manzarası olmadan açılır
   // hd (6144) yüklenemezse normal (3072) sürüme düşer
   Promise.all([yukle(yol).catch(e => yol.includes('/hd/') ? yukle(yol.replace('/hd/', '/')) : Promise.reject(e)), pen ? yukle(pen.dunya).catch(() => null) : null, pen ? yukle(pen.maske).catch(() => null) : null])
-    .then(bitti, () => { gDurum.textContent = 'Görsel yüklenemedi.' });
+    .then(bitti, () => { if (tok === gez.yukTok) gDurum.textContent = 'Görsel yüklenemedi.' });
 }
 function dugmeler(kap, liste, secili, tikla) {
   kap.replaceChildren();
@@ -3424,15 +3457,21 @@ function gezCiz(lon, sonra) {
     if (!gez.set) [gez.set, gez.ayna] = turBilgi(TIPLER.find(x => x.brut === gez.tip).tur);
     ust.replaceChildren(); ust.hidden = true;
     dugmeler(oda, ODALAR, gez.oda, id => gecis({ oda: id })); oda.hidden = false;
+    // kontrol masaüstü #6: düğmeye gelince (fare/dokunuş başında) odanın görseli önceden iner; tıklayınca önbellekten açılır
+    oda.querySelectorAll('button').forEach((b, i) => { const id = ODALAR[i][0]; if (id === 'balkon') return;
+      const on = () => { if (b.dataset.on) return; b.dataset.on = 1; fetch(`360/${gez.set}/${hd360() ? 'hd/' : ''}${id}.jpg`).catch(() => {}) };
+      b.addEventListener('pointerenter', on, { once: true }); b.addEventListener('pointerdown', on, { once: true }) });
     const odaAd = ODALAR.find(o => o[0] === gez.oda)[1];
     // 71-36'nın kendi iç 360 seti yok (71-47 setini kullanır, plan farklı) -> başlıkta açıkça belirtilir (eleştirmen #18)
     const benzer = gez.oda !== 'balkon' && TEMSILI_TIP.includes(gez.tip) ? ' · <small>temsili · benzer tip</small>' : '';
-    const yer = D3.seviye === 'kat' ? `${durum.blok} blok · ${KAT_AD(durum.kat)} · ` : '';
+    // kontrol masaüstü #5: hangi dairenin manzarası olduğu başlıkta görünsün (harf blok harfini içerir: B4)
+    const gd = gez.daire && (VERI[gez.daire.b].daireler.find(x => x.no === gez.daire.no) || null);
+    const yer = gd ? `${KAT_AD(gez.daire.k)} · ${gd.harf} dairesi · ` : D3.seviye === 'kat' ? `${durum.blok} blok · ${KAT_AD(durum.kat)} · ` : '';
     // balkon: her dairenin kendi balkonundan (kendi katı ve konumu) çekilmiş manzara; aynalık dairenin plandaki gerçek yönüne göre
     const bd = gez.oda === 'balkon' && gez.daire && !(BALKON_TIPTE[gez.daire.b] || []).includes(gez.daire.no) ? gez.daire : null, yol = bd ? `360/balkon/${bd.b}${bd.k}${bd.no}.jpg` : `360/${gez.set}/${hd360() ? 'hd/' : ''}${gez.oda}.jpg`;
     // pencereler: odanın pencere maskesine dairenin kendi konumundan (kat, cephe) çekilmiş dış manzara bindirilir
     const pd = gez.oda !== 'balkon' && gez.daire && (PENCERE_MASKE[gez.set] || []).includes(gez.oda) ? gez.daire : null;
-    gez.pencere = pd ? { dunya: `360/pencere/${pd.b}${pd.k}${pd.no}.jpg`, maske: `360/${gez.set}/maske_${gez.oda}.png?v=20261119o` } : null;
+    gez.pencere = pd ? { dunya: `360/pencere/${pd.b}${pd.k}${pd.no}.jpg`, maske: `360/${gez.set}/maske_${gez.oda}.png?v=20261119q` } : null;
     gorselAc(yol, bd ? +BALKON_AYNA[bd.b].includes(bd.no) : gez.ayna, `<b>${yer}${gez.tip} m²</b> · ${odaAd}${benzer}`, lon, sonra);
   } else {
     oda.hidden = true; ust.hidden = false;
@@ -3476,6 +3515,7 @@ const nv = { v: null };
 function noktaYerlestir() {
   if (!three || !gNoktalar.length) return;
   const w = kutu.clientWidth, h = kutu.clientHeight, v = nv.v || (nv.v = new THREE.Vector3()), U = three.uniforms;
+  const yer = [];   // kontrol mobil #7: ekranda çakışan etiketler üst üste binmesin, yukarı kaydırılır
   for (const n of gNoktalar) {
     const la = THREE.MathUtils.degToRad(n.lat), lo = THREE.MathUtils.degToRad(n.lon);
     // Pannini ileri izdüşüm (çizim gölgelendiricisinin tersi)
@@ -3484,7 +3524,13 @@ function noktaYerlestir() {
     v.set(2 * Math.tan(bl / 2) / U.xm.value, S * 2 * Math.tan(Math.atan2(b, Math.hypot(a, c)) / 2) / U.ym.value, Math.abs(bl) < 2.6 ? 0 : 2);
     const gor = v.z < 1 && Math.abs(v.x) < 1.1 && Math.abs(v.y) < 1.1;
     n.e.classList.toggle('gizli', !gor);
-    if (gor) { const s = Math.max(.7, Math.min(1.15, 75 / three.kamera.fov)); n.e.style.transform = `translate(${((v.x + 1) / 2 * w).toFixed(1)}px, ${((1 - v.y) / 2 * h).toFixed(1)}px) translate(-50%, -100%) scale(${s.toFixed(3)})` }
+    if (gor) {
+      const s = Math.max(.7, Math.min(1.15, 75 / three.kamera.fov)), x = (v.x + 1) / 2 * w, ew = (n.e.offsetWidth || 90) * s, eh = (n.e.offsetHeight || 40) * s;
+      let y = (1 - v.y) / 2 * h;
+      for (let i = 0; i < 4; i++) { const c = yer.find(r => Math.abs(r.x - x) < (r.w + ew) / 2 + 4 && Math.abs(r.y - y) < (r.h + eh) / 2 + 4); if (!c) break; y = c.y - (c.h + eh) / 2 - 6 }
+      yer.push({ x, y, w: ew, h: eh });
+      n.e.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -100%) scale(${s.toFixed(3)})`;
+    }
   }
 }
 // yürüme geçişi (Street View gibi): yöne dön + yakınlaş; yeni nokta yüklenince eski görüntünün üstünde
@@ -3572,11 +3618,12 @@ function daireyeGit(b, k, no) {
   });
 }
 function daireGez(brut, turUrl, oda, daire) {
+  const sayfadan = !DK.acik && !D3.pano;   // kontrol mobil #5: sayfadan açıldıysa kapatınca 3D'ye değil sayfaya dönülür
   dunyaAc();
   threeYukle().then(() => {
     [gez.set, gez.ayna] = turBilgi(turUrl); gez.grup = 'daire'; gez.tip = brut; gez.oda = oda || 'salon'; gez.daire = daire || null;
     if (daire) gez.ayna = +BALKON_AYNA[daire.b].includes(daire.no);
-    panoGoster(true); gezCiz(); durakla(1500);
+    panoGoster(true); if (sayfadan && D3.donus) D3.donus.sayfa = true; panoKapatYaz(); gezCiz(); durakla(1500);
     setTimeout(() => document.getElementById('pano-kapat').focus({ preventScroll: true }), 120);
   }).catch(() => bildir('360° görünüm yüklenemedi'));
 }
@@ -3970,7 +4017,7 @@ function dilAgac(kok) {
 }
 async function dilSec(kod) {
   if (kod === 'en' && !DIL.sozluk) {
-    try { const j = await (await fetch('dil_en.json?v=35')).json(); DIL.sozluk = new Map(Object.entries(j.metin)); for (const [a, b] of Object.entries(j.ek || {})) DIL.sozluk.set(a, b) }
+    try { const j = await (await fetch('dil_en.json?v=36')).json(); DIL.sozluk = new Map(Object.entries(j.metin)); for (const [a, b] of Object.entries(j.ek || {})) DIL.sozluk.set(a, b) }
     catch (h) { bildir('English text could not be loaded'); return }
   }
   DIL.kod = kod; document.documentElement.lang = kod;
