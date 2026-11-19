@@ -441,6 +441,7 @@
   "3D dünyada dolaşın": "Roam the 3D world",
   "Mimarın modeli, günün saatiyle değişen gölgeler ve çevre haritası. Ayrı bir pencerede açılır.": "The architect's model, shadows that follow the time of day, and a map of the surroundings. Opens in its own window.",
   "Önce gezin": "Explore first",
+  "Önce gezin,": "Explore first,",
   "sonra karar verin.": "then decide.",
   "Daire": "Units",
   "Bu kattaki daireler": "Apartments on this floor",
@@ -456,6 +457,8 @@
   "Drone fotoğrafı · sürükleyince 3D'ye döner": "Drone photo · drag to return to 3D",
   "Drone fotoğrafları": "Drone photos",
   "Drone fotoğrafı": "Drone photo",
+  "Temsili görünüm · sürükleyince 3D'ye döner": "Illustrative view · drag to return to 3D",
+  "Temsili drone görünümü": "Illustrative drone view",
   "Drone, yakın 1": "Drone, close 1",
   "Drone, yakın 2": "Drone, close 2",
   "Drone, yakın 3": "Drone, close 3",
@@ -463,6 +466,7 @@
   "Drone, uzak 1": "Drone, far 1",
   "Drone, alçaktan 1": "Drone, low 1",
   "Drone, uzak 2": "Drone, far 2",
-  "Drone, alçaktan 2": "Drone, low 2"
+  "Drone, alçaktan 2": "Drone, low 2",
+  "temsili · benzer tip": "illustrative · similar type"
  }
 }
