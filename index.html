@@ -3432,7 +3432,7 @@ function gezCiz(lon, sonra) {
     const bd = gez.oda === 'balkon' && gez.daire && !(BALKON_TIPTE[gez.daire.b] || []).includes(gez.daire.no) ? gez.daire : null, yol = bd ? `360/balkon/${bd.b}${bd.k}${bd.no}.jpg` : `360/${gez.set}/${hd360() ? 'hd/' : ''}${gez.oda}.jpg`;
     // pencereler: odanın pencere maskesine dairenin kendi konumundan (kat, cephe) çekilmiş dış manzara bindirilir
     const pd = gez.oda !== 'balkon' && gez.daire && (PENCERE_MASKE[gez.set] || []).includes(gez.oda) ? gez.daire : null;
-    gez.pencere = pd ? { dunya: `360/pencere/${pd.b}${pd.k}${pd.no}.jpg`, maske: `360/${gez.set}/maske_${gez.oda}.png?v=20261119c` } : null;
+    gez.pencere = pd ? { dunya: `360/pencere/${pd.b}${pd.k}${pd.no}.jpg`, maske: `360/${gez.set}/maske_${gez.oda}.png?v=20261119i` } : null;
     gorselAc(yol, bd ? +BALKON_AYNA[bd.b].includes(bd.no) : gez.ayna, `<b>${yer}${gez.tip} m²</b> · ${odaAd}${benzer}`, lon, sonra);
   } else {
     oda.hidden = true; ust.hidden = false;
